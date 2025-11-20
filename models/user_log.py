@@ -16,26 +16,6 @@ class User:
         self.bill = 0
         self.min_pay = 0
 
-    def update_minimum_pay(self):
-        self.min_pay = self.bill * 0.1
-
-    def purchase(self, amount):
-        if self.remaining_credit < amount:
-            return False
-        self.bill += amount
-        self.remaining_credit -= amount
-        self.update_minimum_pay()
-        return True
-
-    def pay(self, amount):
-        if amount <= 0:
-            return False
-        self.bill -= amount
-        if self.bill < 0:
-            self.bill = 0
-        self.remaining_credit = self.credit_limit - self.bill
-        return True
-
     def get_data(self):
         return {
             "username": self.username,

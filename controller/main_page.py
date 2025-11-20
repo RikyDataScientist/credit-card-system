@@ -3,7 +3,7 @@ from utils.database_helper import load_data, save_data
 
 class MainController:
     def __init__(self, user_login_data):
-        self.db = "database/user_info.py"
+        self.db = "database/user_info.json"
         self.model = MainModel(user_login_data)
 
     def make_purchase(self, amount):
