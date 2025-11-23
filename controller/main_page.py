@@ -9,14 +9,14 @@ class MainController:
     def make_purchase(self, amount):
         if self.model.purchase(amount):
             self.save_to_json()
-            return True
-        return False
+            return f"Your Rp{amount} Purchase is Success"
+        return ValueError("Amount Exceeds Credit Limit")
 
     def pay_charge(self, amount):
         if self.model.pay(amount):
             self.save_to_json()
-            return True
-        return False
+            return f"Your Rp{amount} Repay is Success"
+        raise ValueError("Amount must more than Zero")
 
     def save_to_json(self):
         all_users = load_data(self.db)
