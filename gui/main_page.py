@@ -19,7 +19,7 @@ class Dashboard(QWidget):
         super().__init__()
         self.controller = controller
         self.setWindowTitle("Bank Craft")
-        self.resize(800, 500)
+        self.setFixedSize(800, 500)
 
         main_layout = QHBoxLayout(self)
 
@@ -144,11 +144,11 @@ class Purchase(QWidget):
         amount = self.amount_pay.text().strip()
 
         if amount == "":
-            self.show_error("Input cannot be empty.")
+            show_error("Input cannot be empty.")
             return
 
         if not amount.isdigit():
-            self.show_error("Only numbers can be entered")
+            show_error("Only numbers can be entered")
             return
 
         amount = int(amount)
@@ -196,11 +196,11 @@ class PayBill(QWidget):
         amount = self.amount_pay.text().strip()
 
         if amount == "":
-            self.show_error("Input cannot be empty.")
+            show_error("Input cannot be empty.")
             return
 
         if not amount.isdigit():
-            self.show_error("Only numbers can be entered")
+            show_error("Only numbers can be entered")
             return
 
         amount = int(amount)
