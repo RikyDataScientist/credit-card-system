@@ -1,6 +1,5 @@
 from utils.database_helper import load_data, save_data
 from models.user_log import User
-from controller.main_page import MainController
 
 class UserController:
     path = "database/user_info.json"
@@ -8,19 +7,19 @@ class UserController:
     @staticmethod
     def validate_username(username):
         if not username:
-            raise ValueError("Username tidak boleh kosong")
+            raise ValueError("Username cannot be empty")
         if len(username) < 4:
-            raise ValueError("Username harus terdiri minimal 4 karakter")
+            raise ValueError("Usernames must consist of at least 4 characters")
 
     @staticmethod
     def validate_password(password):
         if len(password) < 8:
-            raise ValueError("Password harus terdiri dari 8 karakter")
+            raise ValueError("Passwords must consist of at least 8 characters")
 
     @staticmethod
     def validate_chn(cardholder_name):
         if not cardholder_name:
-            raise ValueError("Nama Card Holder tidak boleh kosong")
+            raise ValueError("Card Holder Name cannot be empty")
 
     @classmethod
     def load(cls):
@@ -51,10 +50,8 @@ class UserController:
 
         data_user = cls.find_user(username, password)
         if not data_user:
-            raise ValueError("Username atau Password Anda Salah")
-        MainController(data_user)
-
-        return "Login Berhasil"
+            raise ValueError("Your username or password is incorrect.")
+        return "Login Success", data_user
 
     @classmethod
     def register(cls, cardholder_name, username, password):
@@ -63,11 +60,11 @@ class UserController:
         cls.validate_password(password)
 
         if cls.check_username_exist(username):
-            raise ValueError("Username telah digunakan")
+            raise ValueError("The username already exists")
 
         data_user = User(cardholder_name, username, password)
         all_data = cls.load()
         all_data.append(data_user.get_data())
         cls.save(all_data)
 
-        return "Registrasi Berhasil"
+        return "Registration Success"

@@ -1,12 +1,75 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QStackedWidget, QFrame, QVBoxLayout, QPushButton, QLineEdit, QLabel, QMessageBox
+from PyQt6.QtWidgets import QWidget, QFrame, QVBoxLayout, QPushButton, QLineEdit, QLabel
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap, QFont
-
+from gui.main_page import Dashboard
+from controller.main_page import MainController
+from utils.info_helper import show_info, show_error
 class Login(QWidget):
     def __init__(self, stack, controller):
         super().__init__()
         self.stack = stack
         self.controller = controller
+        self.setFixedSize(420, 520)
+        self.setStyleSheet("""
+        QWidget {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Segoe UI';
+        }
+
+        #card {
+            background-color: #161b22;
+            border: 1px solid #1f2937;
+            border-radius: 18px;
+            padding: 35px;
+        }
+
+        #title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #58a6ff;
+            margin-bottom: 5px;
+            border-radius: 18px;
+            padding: 12px;
+        }
+
+        #subtitle {
+            background-color: #161b22;
+            font-size: 14px;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        #inputtext {
+            background-color: #0d1117;
+            border: 2px solid #30363d;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 15px;
+            margin-bottom: 18px;
+            color: #c9d1d9;
+        }
+
+        #inputtext:focus {
+            border: 2px solid #58a6ff;
+            background-color: #0c162d;
+        }
+
+        #button {
+            background-color: #238636;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        #button:hover {
+            background-color: #2ea043;
+        }
+
+        #button:pressed {
+            background-color: #196c2e;
+        }
+        """)
 
         title = QLabel('Login in to HimBank')
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -58,17 +121,16 @@ class Login(QWidget):
         password = self.password.text()
 
         try:
-            message = self.controller.login(username, password)
-            print(message)
-            self.stack.setCurrentIndex(2)
-        except Exception as msg:
-            self.show_error(str(msg))
+            message, data = self.controller.login(username, password)
+            show_info(str(message))
 
-    def show_error(self, msg):
-        popup = QMessageBox()
-        popup.setIcon(QMessageBox.Icon.Critical)
-        popup.setText(msg)
-        popup.exec()
+            main_page = MainController(data)
+            dashboard = Dashboard(main_page)
+            self.stack.addWidget(dashboard)
+            self.stack.setCurrentIndex(2)
+
+        except Exception as msg:
+            show_error(str(msg))
 
 
 class Register(QWidget):
@@ -76,6 +138,68 @@ class Register(QWidget):
         super().__init__()
         self.stack = stack
         self.controller = controller
+        self.setFixedSize(420, 520)
+        self.setStyleSheet("""
+        QWidget {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Segoe UI';
+        }
+
+        #card {
+            background-color: #161b22;
+            border: 1px solid #1f2937;
+            border-radius: 18px;
+            padding: 35px;
+        }
+
+        #title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #58a6ff;
+            margin-bottom: 5px;
+            border-radius: 18px;
+            padding: 12px;
+        }
+
+        #subtitle {
+            background-color: #161b22;
+            font-size: 14px;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        #inputtext {
+            background-color: #0d1117;
+            border: 2px solid #30363d;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 15px;
+            margin-bottom: 18px;
+            color: #c9d1d9;
+        }
+
+        #inputtext:focus {
+            border: 2px solid #58a6ff;
+            background-color: #0c162d;
+        }
+
+        #button {
+            background-color: #238636;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        #button:hover {
+            background-color: #2ea043;
+        }
+
+        #button:pressed {
+            background-color: #196c2e;
+        }
+        """)
 
         title = QLabel('Register Account')
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -134,19 +258,8 @@ class Register(QWidget):
 
         try:
             message = self.controller.register(cardholder_name, username, password)
-            print(message)
+            show_info(str(message))
             self.stack.setCurrentIndex(0)
+
         except Exception as msg:
-            self.show_error(str(msg))
-
-    def show_error(self, msg):
-        popup = QMessageBox()
-        popup.setIcon(QMessageBox.Icon.Critical)
-        popup.setText(msg)
-        popup.exec()
-
-class MainPage(QWidget):
-    def __init__(self, stack):
-        super().__init__()
-        label = QLabel("This is Main Dashboard", alignment=Qt.AlignmentFlag.AlignCenter)
-        label.setStyleSheet("font-size:20px; color:white;")
+            show_error(str(msg))
