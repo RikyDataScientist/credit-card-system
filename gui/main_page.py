@@ -88,29 +88,51 @@ class MainPage(QWidget):
         image.setScaledContents(True)
 
         username = QLabel("Card Number:")
-        info1 = QLabel(str(self.controller.call_cn()))
+        self.info1 = QLabel(str(self.controller.call_cn()))
 
         card_holder_name = QLabel("Card Holder Name:")
-        info2 = QLabel(str(self.controller.call_chn()))
+        self.info2 = QLabel(str(self.controller.call_chn()))
+
+        credit_limit = QLabel("Credit Limit:")
+        self.info3 = QLabel("Rp" + str(self.controller.call_cl()))
 
         remaining_credit = QLabel("Remaining Credit:")
-        info3 = QLabel("Rp" + str(self.controller.call_rc()))
+        self.info4 = QLabel("Rp" + str(self.controller.call_rc()))
+
+        bill = QLabel("User Bill:")
+        self.info5 = QLabel("Rp" + str(self.controller.call_bill()))
+
+        minimum_pay = QLabel("Minimum Payment:")
+        self.info6 = QLabel("Rp" + str(self.controller.call_mp()))
+
+        self.controller.data_changed.connect(self.update_view)
+        self.update_view()
 
         layout = QGridLayout()
-        layout.setSpacing(20)
-        layout.setContentsMargins(0, 20, 0, 0)
-        layout.setRowStretch(0, 0)
-        layout.setRowStretch(1, 1)
 
         layout.addWidget(image, 0, 0, 1, 2, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(username, 1, 0)
-        layout.addWidget(info1, 1, 1)
+        layout.addWidget(self.info1, 1, 1)
         layout.addWidget(card_holder_name, 2, 0)
-        layout.addWidget(info2, 2, 1)
-        layout.addWidget(remaining_credit, 3, 0)
-        layout.addWidget(info3, 3, 1)
+        layout.addWidget(self.info2, 2, 1)
+        layout.addWidget(credit_limit, 3, 0)
+        layout.addWidget(self.info3, 3, 1)
+        layout.addWidget(remaining_credit, 4, 0)
+        layout.addWidget(self.info4, 4, 1)
+        layout.addWidget(bill, 5, 0)
+        layout.addWidget(self.info5, 5, 1)
+        layout.addWidget(minimum_pay, 6, 0)
+        layout.addWidget(self.info6, 6, 1)
 
         self.setLayout(layout)
+
+    def update_view(self):
+        self.info1.setText(str(self.controller.call_cn()))
+        self.info2.setText(str(self.controller.call_chn()))
+        self.info3.setText("Rp" + str(self.controller.call_cl()))
+        self.info4.setText("Rp" + str(self.controller.call_rc()))
+        self.info5.setText("Rp" + str(self.controller.call_bill()))
+        self.info6.setText("Rp" + str(self.controller.call_mp()))
 
 class Purchase(QWidget):
     def __init__(self, controller):
@@ -120,7 +142,10 @@ class Purchase(QWidget):
         title = QLabel("Let's Purchase")
 
         bill = QLabel("Remaining Credit:")
-        info = QLabel("Rp" + str(self.controller.call_rc()))
+        self.info = QLabel("Rp" + str(self.controller.call_rc()))
+
+        self.controller.data_changed.connect(self.update_view)
+        self.update_view()
 
         self.amount_pay = QLineEdit()
         self.amount_pay.setPlaceholderText("Input Your Money")
@@ -134,11 +159,14 @@ class Purchase(QWidget):
 
         layout.addWidget(title, 0, 0, 1, 2)
         layout.addWidget(bill, 1, 0)
-        layout.addWidget(info, 1, 1)
+        layout.addWidget(self.info, 1, 1)
         layout.addWidget(self.amount_pay, 2, 0, 1, 2)
         layout.addWidget(self.button, 3, 0, 1, 2)
 
         self.setLayout(layout)
+
+    def update_view(self):
+        self.info.setText("Rp" + str(self.controller.call_rc()))
 
     def execute(self):
         amount = self.amount_pay.text().strip()
@@ -167,10 +195,13 @@ class PayBill(QWidget):
         title = QLabel("Let's Pay The Bill")
 
         bill = QLabel("Your Bill:")
-        info = QLabel("Rp" + str(self.controller.call_bill()))
+        self.info = QLabel("Rp" + str(self.controller.call_bill()))
 
         credit_limit = QLabel("Minimum Credit")
-        info1 = QLabel("Rp" + str(self.controller.call_mp()))
+        self.info1 = QLabel("Rp" + str(self.controller.call_mp()))
+
+        self.controller.data_changed.connect(self.update_view)
+        self.update_view()
 
         self.amount_pay = QLineEdit()
         self.amount_pay.setPlaceholderText("Input Your Money")
@@ -184,13 +215,17 @@ class PayBill(QWidget):
 
         layout.addWidget(title, 0, 0, 1, 2)
         layout.addWidget(bill, 1, 0)
-        layout.addWidget(info, 1, 1)
+        layout.addWidget(self.info, 1, 1)
         layout.addWidget(credit_limit, 2, 0)
-        layout.addWidget(info1, 2, 1)
+        layout.addWidget(self.info1, 2, 1)
         layout.addWidget(self.amount_pay, 3, 0, 1, 2)
         layout.addWidget(self.button, 4, 0, 1, 2)
 
         self.setLayout(layout)
+
+    def update_view(self):
+        self.info.setText("Rp" + str(self.controller.call_bill()))
+        self.info1.setText("Rp" + str(self.controller.call_mp()))
 
     def execute(self):
         amount = self.amount_pay.text().strip()
