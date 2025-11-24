@@ -1,8 +1,12 @@
 from models.main_model import MainModel
 from utils.database_helper import load_data, save_data
+from PyQt6.QtCore import QObject, pyqtSignal
 
-class MainController:
+class MainController(QObject):
+    data_changed = pyqtSignal()
+
     def __init__(self, user_login_data):
+        super().__init__()
         self.db = "database/user_info.json"
         self.model = MainModel(user_login_data)
 
@@ -10,6 +14,7 @@ class MainController:
         try:
             result = self.model.purchase(amount)
             self.save_to_json()
+            self.data_changed.emit()
             if result is True:
                 return f"Your Rp{amount} Purchase is Success"
         except Exception as e:
@@ -19,6 +24,7 @@ class MainController:
         try:
             result = self.model.pay(amount)
             self.save_to_json()
+            self.data_changed.emit()
             if result is True:
                 return f"Your Rp{amount} Repay is Success"
         except Exception as e:

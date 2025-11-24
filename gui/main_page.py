@@ -82,7 +82,7 @@ class MainPage(QWidget):
         self.controller = controller
 
         image = QLabel()
-        pixmap = QPixmap("bank.png")
+        pixmap = QPixmap("asset/bank.png")
         image.setPixmap(pixmap)
         image.setFixedSize(pixmap.size())
         image.setScaledContents(True)
