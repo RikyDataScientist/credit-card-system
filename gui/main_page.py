@@ -20,6 +20,7 @@ class Dashboard(QWidget):
         self.controller = controller
         self.setWindowTitle("Bank Craft")
         self.setGeometry(200, 200, 1200, 700)
+        self.setStyleSheet(style())
 
         main_layout = QHBoxLayout(self)
 
@@ -88,22 +89,34 @@ class MainPage(QWidget):
         image.setScaledContents(True)
 
         username = QLabel("Card Number:")
+        username.setObjectName("text")
         self.info1 = QLabel()
+        self.info1.setObjectName("text")
 
         card_holder_name = QLabel("Card Holder Name:")
+        card_holder_name.setObjectName("text")
         self.info2 = QLabel()
+        self.info2.setObjectName("text")
 
         credit_limit = QLabel("Credit Limit:")
+        credit_limit.setObjectName("text")
         self.info3 = QLabel()
+        self.info3.setObjectName("text")
 
         remaining_credit = QLabel("Remaining Credit:")
+        remaining_credit.setObjectName("text")
         self.info4 = QLabel()
+        self.info4.setObjectName("text")
 
         bill = QLabel("User Bill:")
+        bill.setObjectName("text")
         self.info5 = QLabel()
+        self.info5.setObjectName("text")
 
         minimum_pay = QLabel("Minimum Payment:")
+        minimum_pay.setObjectName("text")
         self.info6 = QLabel()
+        self.info6.setObjectName("text")
 
         self.controller.data_changed.connect(self.update_view)
         self.update_view()
@@ -140,18 +153,23 @@ class Purchase(QWidget):
         self.controller = controller
 
         title = QLabel("Let's Purchase")
+        title.setObjectName("title")
 
         bill = QLabel("Remaining Credit:")
+        bill.setObjectName("text")
         self.info = QLabel()
+        self.info.setObjectName("text")
 
         self.controller.data_changed.connect(self.update_view)
         self.update_view()
 
         self.amount_pay = QLineEdit()
         self.amount_pay.setPlaceholderText("Input Your Money")
+        self.amount_pay.setObjectName("line")
 
         self.button = QPushButton("Purchase")
         self.button.clicked.connect(self.execute)
+        self.button.setObjectName("button")
 
         layout = QGridLayout()
         layout.setSpacing(15)
@@ -194,21 +212,28 @@ class PayBill(QWidget):
         self.controller = controller
 
         title = QLabel("Let's Pay The Bill")
+        title.setObjectName("title")
 
         bill = QLabel("Your Bill:")
+        bill.setObjectName("text")
         self.info = QLabel()
+        self.info.setObjectName("text")
 
         credit_limit = QLabel("Minimum Credit")
+        credit_limit.setObjectName("text")
         self.info1 = QLabel()
+        self.info1.setObjectName("text")
 
         self.controller.data_changed.connect(self.update_view)
         self.update_view()
 
         self.amount_pay = QLineEdit()
         self.amount_pay.setPlaceholderText("Input Your Money")
+        self.amount_pay.setObjectName("line")
 
         self.button = QPushButton("Pay")
         self.button.clicked.connect(self.execute)
+        self.button.setObjectName("button")
 
         layout = QGridLayout()
         layout.setSpacing(15)
@@ -247,3 +272,82 @@ class PayBill(QWidget):
             self.amount_pay.clear()
         except Exception as msg:
             show_error(str(msg))
+
+def style():
+    return """
+/* GLOBAL WIDGET */
+QWidget {
+    background-color: #0B1F33;
+    color: #E8EEF2;
+    font-family: Segoe UI;
+    font-size: 14px;
+}
+
+/* SIDEBAR FRAME */
+QFrame {
+    background-color: #0E2A44;
+}
+
+/* GENERAL LABEL */
+QLabel {
+    color: #E8EEF2;
+}
+
+/* TITLE LABEL */
+QLabel#title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #6BB6FF;
+}
+
+/* TEXT LABEL */
+QLabel#text {
+    font-size: 15px;
+    color: #D9E6F2;
+    background-color: transparent;
+}
+
+QLabel {
+    background-color: transparent;
+}
+
+/* BUTTON STYLE */
+QPushButton {
+    background-color: #134A6F;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+}
+
+QPushButton:hover {
+    background-color: #1C5C86;
+}
+
+QPushButton:pressed {
+    background-color: #11415D;
+}
+
+/* INPUT FIELD */
+QLineEdit#line {
+    background-color: #0E273B;
+    border: 1px solid #1E4E6F;
+    border-radius: 5px;
+    padding: 6px;
+    color: white;
+}
+
+QLineEdit#line:focus {
+    border: 1px solid #4CA3FF;
+}
+
+/* STACKED WIDGET */
+QStackedWidget {
+    background-color: #0B1F33;
+}
+
+/* REMOVE FRAME OUTLINE IF ANY */
+QFrame {
+    border: none;
+}
+"""

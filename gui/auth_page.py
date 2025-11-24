@@ -117,8 +117,8 @@ class Login(QWidget):
         mainLayout.addStretch()
 
     def execute(self):
-        username = self.username.text()
-        password = self.password.text()
+        username = self.username.text().strip()
+        password = self.password.text().strip()
 
         try:
             message, data = self.controller.login(username, password)
@@ -252,9 +252,9 @@ class Register(QWidget):
         mainLayout.addStretch()
 
     def execute(self):
-        cardholder_name = self.chn.text()
-        username = self.username.text()
-        password = self.password.text()
+        cardholder_name = self.chn.text().strip().title()
+        username = self.username.text().strip()
+        password = self.password.text().strip()
 
         try:
             message = self.controller.register(cardholder_name, username, password)
