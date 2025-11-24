@@ -19,7 +19,7 @@ class Dashboard(QWidget):
         super().__init__()
         self.controller = controller
         self.setWindowTitle("Bank Craft")
-        self.setFixedSize(800, 500)
+        self.setGeometry(200, 200, 1200, 700)
 
         main_layout = QHBoxLayout(self)
 
@@ -64,7 +64,7 @@ class Dashboard(QWidget):
         self.stack.addWidget(page2)
         self.stack.addWidget(page3)
 
-        main_layout.addWidget(sidebar)
+        main_layout.addWidget(sidebar, stretch=0)
         main_layout.addWidget(self.stack, stretch=1)
 
         btn_home.clicked.connect(lambda: self.switch_page(0))
@@ -88,22 +88,22 @@ class MainPage(QWidget):
         image.setScaledContents(True)
 
         username = QLabel("Card Number:")
-        self.info1 = QLabel(str(self.controller.call_cn()))
+        self.info1 = QLabel()
 
         card_holder_name = QLabel("Card Holder Name:")
-        self.info2 = QLabel(str(self.controller.call_chn()))
+        self.info2 = QLabel()
 
         credit_limit = QLabel("Credit Limit:")
-        self.info3 = QLabel("Rp" + str(self.controller.call_cl()))
+        self.info3 = QLabel()
 
         remaining_credit = QLabel("Remaining Credit:")
-        self.info4 = QLabel("Rp" + str(self.controller.call_rc()))
+        self.info4 = QLabel()
 
         bill = QLabel("User Bill:")
-        self.info5 = QLabel("Rp" + str(self.controller.call_bill()))
+        self.info5 = QLabel()
 
         minimum_pay = QLabel("Minimum Payment:")
-        self.info6 = QLabel("Rp" + str(self.controller.call_mp()))
+        self.info6 = QLabel()
 
         self.controller.data_changed.connect(self.update_view)
         self.update_view()
@@ -142,7 +142,7 @@ class Purchase(QWidget):
         title = QLabel("Let's Purchase")
 
         bill = QLabel("Remaining Credit:")
-        self.info = QLabel("Rp" + str(self.controller.call_rc()))
+        self.info = QLabel()
 
         self.controller.data_changed.connect(self.update_view)
         self.update_view()
@@ -157,7 +157,7 @@ class Purchase(QWidget):
         layout.setSpacing(15)
         layout.setContentsMargins(20, 20, 20, 20)
 
-        layout.addWidget(title, 0, 0, 1, 2)
+        layout.addWidget(title, 0, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(bill, 1, 0)
         layout.addWidget(self.info, 1, 1)
         layout.addWidget(self.amount_pay, 2, 0, 1, 2)
@@ -184,8 +184,9 @@ class Purchase(QWidget):
         try:
             msg = self.controller.make_purchase(amount)
             show_info(msg)
+            self.amount_pay.clear()
         except Exception as msg:
-            show_error(msg)
+            show_error(str(msg))
 
 class PayBill(QWidget):
     def __init__(self, controller):
@@ -195,10 +196,10 @@ class PayBill(QWidget):
         title = QLabel("Let's Pay The Bill")
 
         bill = QLabel("Your Bill:")
-        self.info = QLabel("Rp" + str(self.controller.call_bill()))
+        self.info = QLabel()
 
         credit_limit = QLabel("Minimum Credit")
-        self.info1 = QLabel("Rp" + str(self.controller.call_mp()))
+        self.info1 = QLabel()
 
         self.controller.data_changed.connect(self.update_view)
         self.update_view()
@@ -213,7 +214,7 @@ class PayBill(QWidget):
         layout.setSpacing(15)
         layout.setContentsMargins(20, 20, 20, 20)
 
-        layout.addWidget(title, 0, 0, 1, 2)
+        layout.addWidget(title, 0, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(bill, 1, 0)
         layout.addWidget(self.info, 1, 1)
         layout.addWidget(credit_limit, 2, 0)
@@ -243,5 +244,6 @@ class PayBill(QWidget):
         try:
             msg = self.controller.pay_charge(amount)
             show_info(msg)
+            self.amount_pay.clear()
         except Exception as msg:
-            show_error(msg)
+            show_error(str(msg))
