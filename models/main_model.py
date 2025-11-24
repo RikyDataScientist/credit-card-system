@@ -14,11 +14,13 @@ class MainModel:
         self.min_pay = data["minimum payment"]
 
     def update_minimum_pay(self):
-        self.min_pay = self.bill * 0.1
+        self.min_pay = int(self.bill * 0.1)
 
     def purchase(self, amount):
+        if amount <= 0:
+            raise ValueError("The number of inputs must be greater than zero.")
         if self.remaining_credit < amount:
-            return False
+            raise ValueError("Input amount exceeds remaining credit")
         self.bill += amount
         self.remaining_credit -= amount
         self.update_minimum_pay()
@@ -26,7 +28,11 @@ class MainModel:
 
     def pay(self, amount):
         if amount <= 0:
-            return False
+            raise ValueError("The number of inputs must be greater than zero.")
+        if amount > self.bill:
+            raise ValueError("Input amount exceeds billing amount")
+        if amount < self.min_pay:
+            raise ValueError("Input amount is less than minimum payment")
         self.bill -= amount
         if self.bill < 0:
             self.bill = 0

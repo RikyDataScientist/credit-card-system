@@ -7,16 +7,22 @@ class MainController:
         self.model = MainModel(user_login_data)
 
     def make_purchase(self, amount):
-        if self.model.purchase(amount):
+        try:
+            result = self.model.purchase(amount)
             self.save_to_json()
-            return f"Your Rp{amount} Purchase is Success"
-        return ValueError("Amount Exceeds Credit Limit")
+            if result is True:
+                return f"Your Rp{amount} Purchase is Success"
+        except Exception as e:
+            raise e
 
     def pay_charge(self, amount):
-        if self.model.pay(amount):
+        try:
+            result = self.model.pay(amount)
             self.save_to_json()
-            return f"Your Rp{amount} Repay is Success"
-        raise ValueError("Amount must more than Zero")
+            if result is True:
+                return f"Your Rp{amount} Repay is Success"
+        except Exception as e:
+            raise e
 
     def save_to_json(self):
         all_users = load_data(self.db)
